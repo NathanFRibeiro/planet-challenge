@@ -1,14 +1,5 @@
-import styled, { keyframes, css } from "styled-components";
+import styled, { css } from "styled-components";
 import { darken } from "polished";
-
-const rotate = keyframes`
-  from{
-    transform: rotate(0deg);
-  }
-  to{
-    transform: rotate(360deg);
-  }
-`;
 
 export const Container = styled.div`
   background: linear-gradient(#0c1f2c, #0b0c1c);
@@ -77,6 +68,7 @@ export const Footer = styled.div`
     color: #ffff;
     font-family: "Starjedi";
     transition: 0.2s;
+    outline:none;
 
     &:hover {
       background: ${darken(0.1, "#cd3544")};
@@ -131,7 +123,7 @@ export const Info = styled.div`
     overflow: hidden;
 
     span {
-      font-size: 24px;
+      font-size: 22px;
 
       ${props =>
         props.size &&
@@ -144,7 +136,7 @@ export const Info = styled.div`
 
 export const InfoMovies = styled(Info)`
   div {
-    height: 100px;
+    height: 80px;
     justify-content: flex-start;
 
     ul {
@@ -182,11 +174,4 @@ export const Spinner = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  span {
-    font-family: "Starjedi";
-    font-size: 150px;
-    color: #cd3544;
-    text-shadow: 0 20px 30px rgba(0, 0, 0, 0.7);
-    animation: ${rotate} 2s linear infinite;
-  }
 `;

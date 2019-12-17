@@ -17,6 +17,8 @@ body {
   justify-content: center;
   align-items: center;
   background: rgba(0, 0, 0, 0.3);
+
+  
 }
 
 .App a {
@@ -46,7 +48,7 @@ body {
 
 @font-face {
   font-family: "Starjedi";
-  src: local("Starjedi"), url(./assets/fonts/Starjedi.ttf) format("truetype");
+  src: local("Starjedi"), url(../assets/fonts/Starjedi.ttf) format("truetype");
 }
 
 @import url("https://fonts.googleapis.com/css?family=Open+Sans:800,700,300");

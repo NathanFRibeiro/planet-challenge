@@ -19,7 +19,7 @@ import {
 export default function Planet() {
   const [planet, setPlanet] = useState({});
   const [films, setFilms] = useState([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const getPlanet = () => {
     setLoading(true);
@@ -28,6 +28,10 @@ export default function Planet() {
     api.get(`https://swapi.co/api/planets/${idRandom}/`).then(response => {
       setPlanet(response.data);
     });
+
+    setTimeout(() => {
+      setLoading(false);
+    }, 3000);
   };
 
   useEffect(() => {
@@ -46,16 +50,13 @@ export default function Planet() {
     };
 
     getFilms();
-    setTimeout(() => {
-      setLoading(false);
-    }, 1500);
   }, [planet]);
 
   const handleCalculateSize = word => {
     if (word) {
       const len = word.length;
 
-      const size = len > 20 ? "16px" : len > 15 ? "20px" : "24px";
+      const size = len > 23 ? "15px" : len > 20 ? "16px" : len > 10 ? "20px" : "22px";
 
       return size;
     }
