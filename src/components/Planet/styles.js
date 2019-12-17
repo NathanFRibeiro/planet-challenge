@@ -1,5 +1,14 @@
-import styled from "styled-components";
+import styled, { keyframes, css } from "styled-components";
 import { darken } from "polished";
+
+const rotate = keyframes`
+  from{
+    transform: rotate(0deg);
+  }
+  to{
+    transform: rotate(360deg);
+  }
+`;
 
 export const Container = styled.div`
   background: linear-gradient(#0c1f2c, #0b0c1c);
@@ -118,9 +127,17 @@ export const Info = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
+    padding: 5px;
+    overflow: hidden;
 
     span {
-      font-size: 1em;
+      font-size: 24px;
+
+      ${props =>
+        props.size &&
+        css`
+          font-size: ${props.size};
+        `}
     }
   }
 `;
@@ -156,5 +173,20 @@ export const InfoMovies = styled(Info)`
         background: #cd3544;
       }
     }
+  }
+`;
+
+export const Spinner = styled.div`
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  span {
+    font-family: "Starjedi";
+    font-size: 150px;
+    color: #cd3544;
+    text-shadow: 0 20px 30px rgba(0, 0, 0, 0.7);
+    animation: ${rotate} 2s linear infinite;
   }
 `;

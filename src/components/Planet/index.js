@@ -1,5 +1,7 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useState, useEffect } from "react";
 
+import spinner from "~/assets/loading.gif";
 import api from "~/services/api";
 
 import {
@@ -10,121 +12,142 @@ import {
   Info,
   InfoList,
   Row,
-  InfoMovies
+  InfoMovies,
+  Spinner
 } from "./styles";
 
 export default function Planet() {
   const [planet, setPlanet] = useState({});
   const [films, setFilms] = useState([]);
+  const [loading, setLoading] = useState(false);
 
   const getPlanet = () => {
+    setLoading(true);
     const idRandom = Math.floor(Math.random() * 61) + 1;
 
-    api
-      .get(`https://swapi.co/api/planets/${idRandom}/`)
-      .then(function(response) {
-        setPlanet(response.data);
-        getFilms();
-      });
-  };
-
-  const getFilms = () => {
-    const urlFilms = planet.films;
-
-    urlFilms.map(url => {
-      api.get(`${url}`).then(function(response) {
-        console.log(response.data);
-        setFilms([...films, response.data]);
-      });
+    api.get(`https://swapi.co/api/planets/${idRandom}/`).then(response => {
+      setPlanet(response.data);
     });
-
-    console.log(films);
   };
 
   useEffect(() => {
     getPlanet();
-  }, [getPlanet]);
+  }, []);
+
+  useEffect(() => {
+    const getFilms = async () => {
+      setFilms([]);
+      planet.films &&
+        planet.films.map(async url => {
+          const response = await api.get(`${url}`);
+
+          setFilms([...films, response.data]);
+        });
+    };
+
+    getFilms();
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, [planet]);
+
+  const handleCalculateSize = word => {
+    if (word) {
+      const len = word.length;
+
+      const size = len > 20 ? "16px" : len > 15 ? "20px" : "24px";
+
+      return size;
+    }
+  };
 
   return (
     <Container>
       <Header>
         <h2>B2Wars - Planet Challenge</h2>
       </Header>
-      <Content>
-        <h1>{planet.name}</h1>
-        <InfoList>
-          <Row>
-            <Info>
-              <span>Population</span>
-              <div>
-                <span>{planet.population}</span>
-              </div>
-            </Info>
 
-            <Info>
-              <span>Climate</span>
-              <div>
-                <span>{planet.climate}</span>
-              </div>
-            </Info>
+      {loading ? (
+        <Spinner>
+          <img alt="spinner" src={spinner}></img>
+        </Spinner>
+      ) : (
+        <Content>
+          <h1>{planet.name}</h1>
+          <InfoList>
+            <Row>
+              <Info>
+                <span>Population</span>
+                <div>
+                  <span>{planet.population}</span>
+                </div>
+              </Info>
 
-            <Info>
-              <span>Terrain</span>
-              <div>
-                <span>{planet.terrain}</span>
-              </div>
-            </Info>
-          </Row>
+              <Info size={handleCalculateSize(planet.climate)}>
+                <span>Climate</span>
+                <div>
+                  <span>{planet.climate}</span>
+                </div>
+              </Info>
 
-          <Row>
-            <Info>
-              <span>Diameter</span>
-              <div>
-                <span>{planet.diameter}</span>
-                <sup>km</sup>
-              </div>
-            </Info>
+              <Info size={handleCalculateSize(planet.terrain)}>
+                <span>Terrain</span>
+                <div>
+                  <span>{planet.terrain}</span>
+                </div>
+              </Info>
+            </Row>
 
-            <Info>
-              <span>Gravity</span>
-              <div>
-                <span>{planet.gravity}</span>
-              </div>
-            </Info>
+            <Row>
+              <Info>
+                <span>Diameter</span>
+                <div>
+                  <span>{planet.diameter}</span>
+                  <sup>km</sup>
+                </div>
+              </Info>
 
-            <Info>
-              <span>Orbital period</span>
-              <div>
-                <span>{planet.orbital_period}</span>
-                <sup>days</sup>
-              </div>
-            </Info>
+              <Info size={handleCalculateSize(planet.gravity)}>
+                <span>Gravity</span>
+                <div>
+                  <span>{planet.gravity}</span>
+                </div>
+              </Info>
 
-            <Info>
-              <span>Rotation period</span>
-              <div>
-                <span>{planet.rotation_period}</span>
-                <sup>hours</sup>
-              </div>
-            </Info>
-          </Row>
+              <Info>
+                <span>Orbital period</span>
+                <div>
+                  <span>{planet.orbital_period}</span>
+                  <sup>days</sup>
+                </div>
+              </Info>
 
-          <InfoMovies>
-            <span>Featured in N films</span>
-            <div>
-              <ul>
-                <li>Star wars 1</li>
-                <li>Star wars 1</li>
-                <li>Star wars 1</li>
-                <li>Star wars 1</li>
-                <li>Star wars 1</li>
-              </ul>
-            </div>
-          </InfoMovies>
-        </InfoList>
-      </Content>
+              <Info>
+                <span>Rotation period</span>
+                <div>
+                  <span>{planet.rotation_period}</span>
+                  <sup>hours</sup>
+                </div>
+              </Info>
+            </Row>
+
+            <InfoMovies>
+              <span>Featured in {films.length} films</span>
+              <div>
+                <ul>
+                  {films &&
+                    films.map(film => <li key={film.title}>{film.title}</li>)}
+                </ul>
+              </div>
+            </InfoMovies>
+          </InfoList>
+        </Content>
+      )}
+
       <Footer>
-        <button type="button">Next</button>
+        <button onClick={() => getPlanet()} type="button">
+          Next
+        </button>
       </Footer>
     </Container>
   );
