@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import spinner from "~/assets/loading.gif";
-import api from "~/services/api";
+import spinner from '~/assets/loading.gif';
+import api from '~/services/api';
 
 import {
   Container,
@@ -13,53 +12,50 @@ import {
   InfoList,
   Row,
   InfoMovies,
-  Spinner
-} from "./styles";
+  Spinner,
+} from './styles';
 
 export default function Planet() {
   const [planet, setPlanet] = useState({});
   const [films, setFilms] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getPlanet = () => {
+  const getPlanet = async () => {
     setLoading(true);
     const idRandom = Math.floor(Math.random() * 61) + 1;
 
-    api.get(`https://swapi.co/api/planets/${idRandom}/`).then(response => {
-      setPlanet(response.data);
+    const { data } = await api.get(`https://swapi.co/api/planets/${idRandom}/`);
+
+    setPlanet(data);
+
+    const filmList = [];
+
+    await data.films.map(async url => {
+      const film = await api.get(`${url}`);
+      filmList.push(film.data.title);
     });
+
+    setFilms(filmList);
 
     setTimeout(() => {
       setLoading(false);
-    }, 3000);
+    }, 2000);
   };
 
   useEffect(() => {
     getPlanet();
   }, []);
 
-  useEffect(() => {
-    const getFilms = async () => {
-      setFilms([]);
-      planet.films &&
-        planet.films.map(async url => {
-          const response = await api.get(`${url}`);
-
-          setFilms([...films, response.data]);
-        });
-    };
-
-    getFilms();
-  }, [planet]);
-
   const handleCalculateSize = word => {
     if (word) {
       const len = word.length;
 
-      const size = len > 23 ? "15px" : len > 20 ? "16px" : len > 10 ? "20px" : "22px";
+      const size =
+        len > 23 ? '15px' : len > 20 ? '16px' : len > 10 ? '20px' : '22px';
 
       return size;
     }
+    return 0;
   };
 
   return (
@@ -70,7 +66,7 @@ export default function Planet() {
 
       {loading ? (
         <Spinner>
-          <img alt="spinner" src={spinner}></img>
+          <img alt="spinner" src={spinner} />
         </Spinner>
       ) : (
         <Content>
@@ -136,8 +132,7 @@ export default function Planet() {
               <span>Featured in {films.length} films</span>
               <div>
                 <ul>
-                  {films &&
-                    films.map(film => <li key={film.title}>{film.title}</li>)}
+                  {films && films.map(film => <li key={film}>{film}</li>)}
                 </ul>
               </div>
             </InfoMovies>

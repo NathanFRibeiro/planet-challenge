@@ -1,5 +1,5 @@
-import styled, { css } from "styled-components";
-import { darken } from "polished";
+import styled, { css } from 'styled-components';
+import { darken } from 'polished';
 
 export const Container = styled.div`
   background: linear-gradient(#0c1f2c, #0b0c1c);
@@ -25,11 +25,11 @@ export const Header = styled.div`
 
   @font-face {
     font-family: Starjedi;
-    src: url("../../assets/fonts/Starjedi.ttf");
+    src: url('../../assets/fonts/Starjedi.ttf');
   }
 
   h2 {
-    font-family: "Starjedi";
+    font-family: 'Starjedi';
     font-weight: normal;
     font-size: 30px;
   }
@@ -44,7 +44,7 @@ export const Content = styled.div`
   padding: 30px;
 
   h1 {
-    font-family: "Starjedi";
+    font-family: 'Starjedi';
     letter-spacing: 2px;
     font-size: 40px;
   }
@@ -66,12 +66,12 @@ export const Footer = styled.div`
     background: #cd3544;
     border: 0;
     color: #ffff;
-    font-family: "Starjedi";
+    font-family: 'Starjedi';
     transition: 0.2s;
-    outline:none;
+    outline: none;
 
     &:hover {
-      background: ${darken(0.1, "#cd3544")};
+      background: ${darken(0.1, '#cd3544')};
       cursor: pointer;
     }
   }
